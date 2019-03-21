@@ -91,7 +91,7 @@ InputFifoStream_get(Stream* stream,
                     const char* delims,
                     unsigned timeoutTicks)
 {
-    InputFifoStream* self = (InputFifoStream*) stream;
+    DECL_UNUSED_VAR(InputFifoStream* self) = (InputFifoStream*) stream;
     Debug_ASSERT_SELF(self);
 
     size_t i        = 0;
@@ -150,7 +150,7 @@ InputFifoStream_skip(Stream* stream)
 void
 InputFifoStream_dtor(Stream* stream)
 {
-    InputFifoStream* self = (InputFifoStream*) stream;
+    DECL_UNUSED_VAR(InputFifoStream* self) = (InputFifoStream*) stream;
     Debug_ASSERT_SELF(self);
 
     CharFifo_dtor(&self->readBuf);
