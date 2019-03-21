@@ -26,10 +26,10 @@ typedef size_t
 
 typedef size_t
 (*Stream_GetT)(Stream* self,
-                char* buff,
-                size_t len,
-                const char* delims,
-                unsigned timeoutTicks);
+               char* buff,
+               size_t len,
+               const char* delims,
+               unsigned timeoutTicks);
 typedef size_t
 (*Stream_AvailableT)(Stream* self);
 
@@ -80,10 +80,10 @@ Stream_read(Stream* self, char* buffer, size_t length)
 /// can ret EOF
 INLINE int
 Stream_get(Stream* self,
-            char* buff,
-            size_t len,
-            const char* delims,
-            unsigned timeOutTicks)
+           char* buff,
+           size_t len,
+           const char* delims,
+           unsigned timeOutTicks)
 {
     Debug_ASSERT_SELF(self);
     return self->vtable->get(self, buff, len, delims, timeOutTicks);

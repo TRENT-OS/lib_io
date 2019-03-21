@@ -36,10 +36,10 @@ InputFifoStream_read(Stream* self, char* buffer, size_t length);
 
 size_t
 InputFifoStream_get(Stream* self,
-               char* buff,
-               size_t len,
-               const char* delims,
-               unsigned timeoutTicks);
+                    char* buff,
+                    size_t len,
+                    const char* delims,
+                    unsigned timeoutTicks);
 size_t
 InputFifoStream_available(Stream* self);
 

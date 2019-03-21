@@ -35,8 +35,8 @@ FifoStream_ctor(FifoStream* self, size_t writeBufSize, size_t readBufSize)
 
     bool retval = true;
     Stream* stream =
-            InputFifoStream_TO_STREAM(
-                FifoStream_TO_INPUT_FIFO_STREAM(self));
+        InputFifoStream_TO_STREAM(
+            FifoStream_TO_INPUT_FIFO_STREAM(self));
 
     if (!CharFifo_ctor(&self->writeBuf, writeBufSize))
     {
@@ -66,7 +66,7 @@ FifoStream_write(Stream* stream, char const* buffer, size_t length)
 
     bool ok = false;
     size_t capacity = 0, size = 0, free = 0, written = 0;
-    char const *pC = NULL;
+    char const* pC = NULL;
 
     if (length > 0)
     {

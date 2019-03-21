@@ -36,7 +36,7 @@ Stream_vaprintf(Stream* self, const char* fmt, va_list args)
         if (n < -1 || n >= capacity)
         {
             size_t newCapacity = capacity * 2;
-            char * tmp = Memory_realloc(msg, newCapacity);
+            char* tmp = Memory_realloc(msg, newCapacity);
 
             if (tmp == NULL)
             {
@@ -52,7 +52,7 @@ Stream_vaprintf(Stream* self, const char* fmt, va_list args)
         }
         else { /* do nothing */ }
     }
-    while(n < -1 || n >= capacity);
+    while (n < -1 || n >= capacity);
 
     if (msg != NULL)
     {

@@ -75,8 +75,8 @@ InputFifoStream_read(Stream* stream, char* buffer, size_t length)
     size_t      readBytes = 0;
 
     for (size_t i = 0;
-            i < length && (read = CharFifo_getFirst(readBuf)) != NULL;
-            i++, readBytes++)
+         i < length && (read = CharFifo_getFirst(readBuf)) != NULL;
+         i++, readBytes++)
     {
         buffer[i] = *read;
         CharFifo_pop(readBuf);
@@ -86,10 +86,10 @@ InputFifoStream_read(Stream* stream, char* buffer, size_t length)
 
 size_t
 InputFifoStream_get(Stream* stream,
-               char* buff,
-               size_t len,
-               const char* delims,
-               unsigned timeoutTicks)
+                    char* buff,
+                    size_t len,
+                    const char* delims,
+                    unsigned timeoutTicks)
 {
     InputFifoStream* self = (InputFifoStream*) stream;
     Debug_ASSERT_SELF(self);
@@ -99,9 +99,9 @@ InputFifoStream_get(Stream* stream,
     unsigned long long timeBase = System_getTickCount();
 
     while (i < len &&
-            !foundDelim &&
-            (timeoutTicks == 0 ||
-                System_getTickCount() - timeBase < timeoutTicks))
+           !foundDelim &&
+           (timeoutTicks == 0 ||
+            System_getTickCount() - timeBase < timeoutTicks))
     {
         if (InputFifoStream_read(stream, &buff[i], sizeof(char)) > 0)
         {
