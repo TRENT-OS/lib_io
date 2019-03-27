@@ -22,14 +22,14 @@ typedef struct InputFifoStream InputFifoStream;
 struct InputFifoStream
 {
     Stream                  parent;
-    CharFifo                readBuf;
+    CharFifo                readFifo;
 };
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
 bool
-InputFifoStream_ctor(InputFifoStream* self, size_t readBufSize);
+InputFifoStream_ctor(InputFifoStream* self, void* readBuf, size_t readBufSize);
 
 size_t
 InputFifoStream_read(Stream* self, char* buffer, size_t length);

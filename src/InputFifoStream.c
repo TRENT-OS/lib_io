@@ -44,13 +44,15 @@ static const Stream_Vtable InputFifoStream_vtable =
 /* Public functions ----------------------------------------------------------*/
 
 bool
-InputFifoStream_ctor(InputFifoStream* self, size_t readBufSize)
+InputFifoStream_ctor(InputFifoStream* self,
+                     void*  readBuf,
+                     size_t readBufSize)
 {
     Debug_ASSERT_SELF(self);
 
     bool retval = true;
 
-    if (!CharFifo_ctor(&self->readBuf, readBufSize))
+    if (!CharFifo_ctor(&self->readFifo, readBuf, readBufSize))
     {
         goto error1;
     }
@@ -70,7 +72,7 @@ InputFifoStream_read(Stream* stream, char* buffer, size_t length)
     Debug_ASSERT_SELF(self);
     Debug_ASSERT(buffer != NULL);
 
-    CharFifo*   readBuf = &self->readBuf;
+    CharFifo*   readBuf = &self->readFifo;
     char const* read = NULL;
     size_t      readBytes = 0;
 
@@ -91,7 +93,7 @@ InputFifoStream_get(Stream* stream,
                     const char* delims,
                     unsigned timeoutTicks)
 {
-    DECL_UNUSED_VAR(InputFifoStream* self) = (InputFifoStream*) stream;
+    DECL_UNUSED_VAR(InputFifoStream * self) = (InputFifoStream*) stream;
     Debug_ASSERT_SELF(self);
 
     size_t i        = 0;
@@ -135,7 +137,7 @@ InputFifoStream_available(Stream* stream)
 {
     InputFifoStream* self = (InputFifoStream*) stream;
     Debug_ASSERT_SELF(self);
-    return CharFifo_getSize(&self->readBuf);
+    return CharFifo_getSize(&self->readFifo);
 }
 
 void
@@ -144,16 +146,16 @@ InputFifoStream_skip(Stream* stream)
     InputFifoStream* self = (InputFifoStream*) stream;
     Debug_ASSERT_SELF(self);
 
-    CharFifo_clear(&self->readBuf);
+    CharFifo_clear(&self->readFifo);
 }
 
 void
 InputFifoStream_dtor(Stream* stream)
 {
-    DECL_UNUSED_VAR(InputFifoStream* self) = (InputFifoStream*) stream;
+    DECL_UNUSED_VAR(InputFifoStream * self) = (InputFifoStream*) stream;
     Debug_ASSERT_SELF(self);
 
-    CharFifo_dtor(&self->readBuf);
+    CharFifo_dtor(&self->readFifo);
 }
 
 

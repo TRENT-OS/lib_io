@@ -29,7 +29,9 @@ static const Stream_Vtable FifoStream_vtable =
 /* Public functions ----------------------------------------------------------*/
 
 bool
-FifoStream_ctor(FifoStream* self, size_t writeBufSize, size_t readBufSize)
+FifoStream_ctor(FifoStream* self,
+                void* writeBuf, size_t writeBufSize,
+                void* readBuf, size_t readBufSize)
 {
     Debug_ASSERT_SELF(self);
 
@@ -38,11 +40,11 @@ FifoStream_ctor(FifoStream* self, size_t writeBufSize, size_t readBufSize)
         InputFifoStream_TO_STREAM(
             FifoStream_TO_INPUT_FIFO_STREAM(self));
 
-    if (!CharFifo_ctor(&self->writeBuf, writeBufSize))
+    if (!CharFifo_ctor(&self->writeFifo, writeBuf, writeBufSize))
     {
         goto error1;
     }
-    if (!InputFifoStream_ctor(&self->parent, readBufSize))
+    if (!InputFifoStream_ctor(&self->parent, readBuf, readBufSize))
     {
         goto error2;
     }
@@ -70,8 +72,8 @@ FifoStream_write(Stream* stream, char const* buffer, size_t length)
 
     if (length > 0)
     {
-        capacity    = CharFifo_getCapacity(&self->writeBuf);
-        size        = CharFifo_getSize(&self->writeBuf);
+        capacity    = CharFifo_getCapacity(&self->writeFifo);
+        size        = CharFifo_getSize(&self->writeFifo);
 
         free    = capacity - size;
         written = length < free ? length : free;
@@ -79,7 +81,7 @@ FifoStream_write(Stream* stream, char const* buffer, size_t length)
         for (size_t i = 0; i < written; i++)
         {
             pC = &((char const*) buffer)[i];
-            ok = CharFifo_push(&self->writeBuf, pC);
+            ok = CharFifo_push(&self->writeFifo, pC);
             Debug_ASSERT(ok);
         }
     }
@@ -94,7 +96,7 @@ FifoStream_flush(Stream* stream)
     FifoStream* self = (FifoStream*) stream;
     Debug_ASSERT_SELF(self);
 
-    while (CharFifo_getSize(&self->writeBuf) > 0)
+    while (CharFifo_getSize(&self->writeFifo) > 0)
     {
         System_delayTicks(1);
     }
@@ -106,7 +108,7 @@ FifoStream_dtor(Stream* stream)
     FifoStream* self = (FifoStream*) stream;
     Debug_ASSERT_SELF(self);
 
-    CharFifo_dtor(&self->writeBuf);
+    CharFifo_dtor(&self->writeFifo);
     InputFifoStream_dtor(stream);
 }
 

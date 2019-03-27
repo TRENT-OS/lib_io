@@ -19,7 +19,7 @@ typedef struct FifoStream FifoStream;
 struct FifoStream
 {
     InputFifoStream         parent;
-    CharFifo                writeBuf;
+    CharFifo                writeFifo;
 };
 
 
@@ -27,7 +27,9 @@ struct FifoStream
 /* Exported functions ------------------------------------------------------- */
 
 bool
-FifoStream_ctor(FifoStream* self, size_t writeBufSize, size_t readBufSize);
+FifoStream_ctor(FifoStream* self,
+                void* writeBuf, size_t writeBufSize,
+                void* readBuf, size_t readBufSize);
 
 size_t
 FifoStream_write(Stream* self, char const* buffer, size_t length);
