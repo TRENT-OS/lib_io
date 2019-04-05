@@ -72,16 +72,14 @@ InputFifoStream_read(Stream* stream, char* buffer, size_t length)
     Debug_ASSERT_SELF(self);
     Debug_ASSERT(buffer != NULL);
 
-    CharFifo*   readBuf = &self->readFifo;
-    char const* read = NULL;
-    size_t      readBytes = 0;
+    CharFifo*   readFifo    = &self->readFifo;
+    size_t      readBytes   = 0;
+    size_t      fifoSize    = CharFifo_getSize(readFifo);
 
-    for (size_t i = 0;
-         i < length && (read = CharFifo_getFirst(readBuf)) != NULL;
-         i++, readBytes++)
+    while (readBytes < length && readBytes < fifoSize)
     {
-        buffer[i] = *read;
-        CharFifo_pop(readBuf);
+        buffer[readBytes++] = * CharFifo_getFirst(readFifo);
+        CharFifo_pop(readFifo);
     }
     return readBytes;
 }
