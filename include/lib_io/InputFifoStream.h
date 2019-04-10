@@ -41,7 +41,9 @@ struct InputFifoStream
 bool
 InputFifoStream_ctor(InputFifoStream* self, void* readBuf, size_t readBufSize);
 /**
- * @brief static implementation of virtual method Stream_read()
+ * @brief static implementation of virtual method Stream_read(). For an input
+ * fifo stream the read is always a non blocking function. The bytes in the
+ *  fifo are taken
  *
  */
 size_t

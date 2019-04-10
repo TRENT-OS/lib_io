@@ -43,7 +43,10 @@ FifoStream_ctor(FifoStream* self,
                 void* writeBuf, size_t writeBufSize,
                 void* readBuf, size_t readBufSize);
 /**
- * @brief static implementation of virtual method Stream_available()
+ * @brief static implementation of virtual method Stream_write(). For a fifo
+ *  stream the write is always a non blocking function. The bytes are just
+ *  stored in the fifo and the actual transfer is deferred. Synchronization
+ *  functions of Stream.h can be used
  *
  */
 size_t
