@@ -1,3 +1,17 @@
+/**
+ * @addtogroup LibIO
+ * @{
+ *
+ * @file InputFifoStream.h
+ *
+ * @brief a class that implements the Stream.h interface providing a buffered
+ *  input with a FIFO.
+ *
+ *
+ * @author Carmelo Pintaudi
+ *
+ * Copyright (C) 2019, Hensoldt Cyber GmbH
+ */
 #if !defined(INPUT_FIFO_STREAM_H)
 #define INPUT_FIFO_STREAM_H
 
@@ -77,5 +91,5 @@ InputFifoStream_skip(Stream* self);
 void
 InputFifoStream_dtor(Stream* self);
 
-
 #endif /* FIFO_STREAM_H */
+///@}

@@ -1,3 +1,16 @@
+/**
+ * @addtogroup LibIO
+ * @{
+ *
+ * @file Stream.h
+ *
+ * @brief interface that abstracts a Stream.
+ *
+ *
+ * @author Carmelo Pintaudi
+ *
+ * Copyright (C) 2019, Hensoldt Cyber GmbH
+ */
 #if !defined(STREAM_H)
 #define STREAM_H
 
@@ -337,3 +350,4 @@ int
 Stream_printf(Stream* self, const char* fmt, ...);
 
 #endif /* STREAM_H */
+///@}
