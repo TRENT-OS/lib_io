@@ -16,6 +16,8 @@
 
 /* Public functions ----------------------------------------------------------*/
 
+#if !defined(Memory_Config_STATIC)
+
 int
 Stream_vaprintf(Stream* self, const char* fmt, va_list args)
 {
@@ -81,6 +83,7 @@ Stream_printf(Stream* self, const char* fmt, ...)
 
     return retval;
 }
+#endif
 
 /* Private Functions -------------------------------------------------------- */
 ///@}
