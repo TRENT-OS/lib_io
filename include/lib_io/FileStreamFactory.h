@@ -32,10 +32,14 @@ typedef void
 (*FileStreamFactory_DestroyT)(FileStreamFactory* self,
                               FileStream* fileStream);
 
+typedef void
+(*FileStreamFactory__DtorT)(FileStreamFactory* self);
+
 typedef struct
 {
     FileStreamFactory_CreateT   create;
     FileStreamFactory_DestroyT  destroy;
+    FileStreamFactory__DtorT    dtor;
 }
 FileStreamFactory_Vtable;
 
@@ -49,7 +53,15 @@ struct FileStreamFactory
 
 
 /* Exported functions ------------------------------------------------------- */
-
+/**
+ * @brief creates and initializes a new instance of a FileStream
+ * and returns it
+ * 
+ * @param self pointer to self
+ * @param path path of the filestream which is to be created
+ * @param mode in which the filestream will be opened (read, write, read/write...)
+ * @return pointer to the created filestream
+ */
 INLINE FileStream*
 FileStreamFactory_create(FileStreamFactory* self,
                          const char* path,
@@ -58,13 +70,29 @@ FileStreamFactory_create(FileStreamFactory* self,
     Debug_ASSERT_SELF(self);
     return self->vtable->create(self, path, mode);
 }
-
+/**
+ * @brief frees the memory allocated for the FileStream
+ * 
+ * @param self pointer to self
+ * @param fileStream pointer to the filestream which is to be destroyed
+ *
+ */
 INLINE void
 FileStreamFactory_destroy(FileStreamFactory* self,
                           FileStream* fileStream)
 {
     Debug_ASSERT_SELF(self);
     self->vtable->destroy(self, fileStream);
+}
+/**
+ * @brief destructor
+ *
+ */
+INLINE void
+FileStreamFactory_dtor(FileStreamFactory* self)
+{
+    Debug_ASSERT_SELF(self);
+    self->vtable->dtor(self);
 }
 
 #endif /* FILE_STREAM_H */
