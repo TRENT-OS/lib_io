@@ -2,7 +2,7 @@
  * @addtogroup LibIO
  * @{
  *
- * @file FileStream.h
+ * @file FileStreamFactory.h
  *
  * @brief a file stream abstract factory interface
  *
@@ -95,5 +95,5 @@ FileStreamFactory_dtor(FileStreamFactory* self)
     self->vtable->dtor(self);
 }
 
-#endif /* FILE_STREAM_H */
+#endif /* FILE_STREAM_FACTORY_H */
 
