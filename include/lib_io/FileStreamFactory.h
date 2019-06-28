@@ -56,7 +56,7 @@ struct FileStreamFactory
 /**
  * @brief creates and initializes a new instance of a FileStream
  * and returns it
- * 
+ *
  * @param self pointer to self
  * @param path path of the filestream which is to be created
  * @param mode in which the filestream will be opened (read, write, read/write...)
@@ -72,7 +72,7 @@ FileStreamFactory_create(FileStreamFactory* self,
 }
 /**
  * @brief frees the memory allocated for the FileStream
- * 
+ *
  * @param self pointer to self
  * @param fileStream pointer to the filestream which is to be destroyed
  *
