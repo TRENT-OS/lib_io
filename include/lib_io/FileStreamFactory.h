@@ -17,10 +17,20 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "lib_io/FileStream.h"
+#include "lib_util/Bitmap.h"
 
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
+
+typedef enum
+{
+    FileStream_DeleteFlags_CLOSE,
+    FileStream_DeleteFlags_DELETE,
+
+    FileStream_DeleteFlags_MAX
+}
+FileStream_DeleteFlags;
 
 typedef struct FileStreamFactory FileStreamFactory;
 
@@ -30,7 +40,8 @@ typedef FileStream*
                              FileStream_OpenMode mode);
 typedef void
 (*FileStreamFactory_DestroyT)(FileStreamFactory* self,
-                              FileStream* fileStream);
+                              FileStream* fileStream,
+                              BitMap16 flags);
 
 typedef void
 (*FileStreamFactory__DtorT)(FileStreamFactory* self);
@@ -78,11 +89,10 @@ FileStreamFactory_create(FileStreamFactory* self,
  *
  */
 INLINE void
-FileStreamFactory_destroy(FileStreamFactory* self,
-                          FileStream* fileStream)
+FileStreamFactory_destroy(FileStreamFactory* self, FileStream* fileStream, BitMap16 flags)
 {
     Debug_ASSERT_SELF(self);
-    self->vtable->destroy(self, fileStream);
+    self->vtable->destroy(self, fileStream, flags);
 }
 /**
  * @brief destructor
