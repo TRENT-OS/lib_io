@@ -108,3 +108,4 @@ FileStreamFactory_dtor(FileStreamFactory* self)
 
 #endif /* FILE_STREAM_FACTORY_H */
 
+///@}

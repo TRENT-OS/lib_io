@@ -116,3 +116,4 @@ FileStream_clearError(FileStream* self)
 
 #endif /* FILE_STREAM_H */
 
+///@}
