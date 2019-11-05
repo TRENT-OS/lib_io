@@ -18,6 +18,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "lib_io/Stream.h"
+#include <stdint.h>
 
 
 /* Exported macro ------------------------------------------------------------*/
@@ -49,9 +50,9 @@ typedef enum
 }
 FileStream_SeekMode;
 
-typedef long int
-(*FileStream_SeekT)(FileStream* self,
-                    long long int offset,
+typedef int64_t
+(*FileStream_SeekT)(FileStream* fileStream,
+                    int64_t offset,
                     FileStream_SeekMode mode);
 typedef FileStream*
 (*FileStream_ReOpenT)(FileStream* self, FileStream_OpenMode mode);
