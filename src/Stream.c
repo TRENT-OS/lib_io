@@ -3,7 +3,7 @@
 #include "lib_io/Stream.h"
 #include "lib_osal/System.h"
 
-#include "lib_debug/Debug.h"
+#include "SeosLogger.h"
 #include "lib_mem/Memory.h"
 
 #include <stdarg.h>

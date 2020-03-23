@@ -18,8 +18,8 @@
 
 #include "lib_compiler/compiler.h"
 
-#include "lib_debug/Debug.h"
-#include "lib_osal/System.h"
+#include "SeosLogger.h"
+#include "System.h"
 
 #include <stddef.h>
 #include <stdint.h>

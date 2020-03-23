@@ -3,7 +3,7 @@
 #include "lib_io/FifoStream.h"
 #include "lib_osal/System.h"
 
-#include "lib_debug/Debug.h"
+#include "SeosLogger.h"
 #include <stdbool.h>
 
 
