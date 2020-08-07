@@ -139,8 +139,7 @@ FifoDataport_read(
             {
                 break;
             }
-            target  = &target[read++];
-            *target = *source;
+            target[read++] = *source;
             CharFifo_pop(&self->dataStruct);
         }
     }
