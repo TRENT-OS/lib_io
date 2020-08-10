@@ -31,28 +31,41 @@ typedef struct
 }
 FifoDataport;
 
+
+//------------------------------------------------------------------------------
 static inline bool
-FifoDataport_ctor(FifoDataport* self, size_t capacity)
+FifoDataport_ctor(
+    FifoDataport* self,
+    size_t capacity)
 {
     return CharFifo_ctor(&self->dataStruct,
                          self->data,
                          capacity);
 }
 
+
+//------------------------------------------------------------------------------
 static inline size_t
-FifoDataport_getSize(FifoDataport* self)
+FifoDataport_getSize(
+    FifoDataport* self)
 {
     return CharFifo_getSize(&self->dataStruct);
 }
 
+
+//------------------------------------------------------------------------------
 static inline size_t
-FifoDataport_getCapacity(FifoDataport* self)
+FifoDataport_getCapacity(
+    FifoDataport* self)
 {
     return CharFifo_getCapacity(&self->dataStruct);
 }
 
+
+//------------------------------------------------------------------------------
 static inline void const*
-FifoDataport_getFirst(FifoDataport* self)
+FifoDataport_getFirst(
+    FifoDataport* self)
 {
     if (CharFifo_isEmpty(&self->dataStruct))
     {
@@ -61,8 +74,11 @@ FifoDataport_getFirst(FifoDataport* self)
     return &self->data[self->dataStruct.first];
 }
 
+
+//------------------------------------------------------------------------------
 static inline size_t
-FifoDataport_getAmountConsecutives(FifoDataport* self)
+FifoDataport_getAmountConsecutives(
+    FifoDataport* self)
 {
     size_t capacity = FifoDataport_getCapacity(self);
     size_t size     = FifoDataport_getSize(self);
@@ -72,8 +88,12 @@ FifoDataport_getAmountConsecutives(FifoDataport* self)
     return (first > last) ? capacity - first : size;
 }
 
+
+//------------------------------------------------------------------------------
 static inline void
-FifoDataport_remove(FifoDataport* self, size_t amount)
+FifoDataport_remove(
+    FifoDataport* self,
+    size_t amount)
 {
     while (amount--)
     {
@@ -81,8 +101,13 @@ FifoDataport_remove(FifoDataport* self, size_t amount)
     }
 }
 
+
+//------------------------------------------------------------------------------
 static inline size_t
-FifoDataport_read(FifoDataport* self, void* buf, size_t len)
+FifoDataport_read(
+    FifoDataport* self,
+    void* buf,
+    size_t len)
 {
     size_t      read   = 0;
     char*       target = buf;
@@ -106,8 +131,13 @@ FifoDataport_read(FifoDataport* self, void* buf, size_t len)
     return read;
 }
 
+
+//------------------------------------------------------------------------------
 static inline size_t
-FifoDataport_write(FifoDataport* self, void const* buf, size_t len)
+FifoDataport_write(
+    FifoDataport* self,
+    void const* buf,
+    size_t len)
 {
     size_t written      = 0;
     char const* target  = buf;
@@ -123,8 +153,11 @@ FifoDataport_write(FifoDataport* self, void const* buf, size_t len)
     return written;
 }
 
+
+//------------------------------------------------------------------------------
 static inline void
-FifoDataport_dtor(FifoDataport* self)
+FifoDataport_dtor(
+    FifoDataport* self)
 {
     CharFifo_dtor(&self->dataStruct);
 }
