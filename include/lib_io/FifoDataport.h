@@ -63,11 +63,29 @@ FifoDataport_getCapacity(
 
 
 //------------------------------------------------------------------------------
+static inline bool
+FifoDataport_isEmpty(
+    FifoDataport* self)
+{
+    return CharFifo_isEmpty(&self->dataStruct);
+}
+
+
+//------------------------------------------------------------------------------
+static inline bool
+FifoDataport_isFull(
+    FifoDataport* self)
+{
+    return CharFifo_isFull(&self->dataStruct);
+}
+
+
+//------------------------------------------------------------------------------
 static inline void const*
 FifoDataport_getFirst(
     FifoDataport* self)
 {
-    if (CharFifo_isEmpty(&self->dataStruct))
+    if (FifoDataport_isEmpty(self))
     {
         return NULL;
     }
@@ -109,23 +127,21 @@ FifoDataport_read(
     void* buf,
     size_t len)
 {
-    size_t      read   = 0;
-    char*       target = buf;
-    char const* source = NULL;
+    size_t  read   = 0;
+    char*   target = buf;
 
     if (target != NULL)
     {
         while (read < len)
         {
-            CharFifo* cFifo = &self->dataStruct;
-            source = CharFifo_getFirst(cFifo);
+            const char* source = FifoDataport_getFirst(self);
             if (NULL == source)
             {
                 break;
             }
             target  = &target[read++];
             *target = *source;
-            CharFifo_pop(cFifo);
+            CharFifo_pop(&self->dataStruct);
         }
     }
     return read;
