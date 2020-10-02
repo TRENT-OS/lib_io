@@ -41,7 +41,7 @@ typedef FileStream*
 typedef void
 (*FileStreamFactory_DestroyT)(FileStreamFactory* self,
                               FileStream* fileStream,
-                              BitMap16 flags);
+                              Bitmap16 flags);
 
 typedef void
 (*FileStreamFactory__DtorT)(FileStreamFactory* self);
@@ -90,7 +90,7 @@ FileStreamFactory_create(FileStreamFactory* self,
  */
 INLINE void
 FileStreamFactory_destroy(FileStreamFactory* self, FileStream* fileStream,
-                          BitMap16 flags)
+                          Bitmap16 flags)
 {
     Debug_ASSERT_SELF(self);
     self->vtable->destroy(self, fileStream, flags);
