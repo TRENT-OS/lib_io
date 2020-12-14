@@ -1,3 +1,4 @@
+/*  Copyright (C) 2020, Hensoldt Cyber GmbH */
 /* Includes ------------------------------------------------------------------*/
 
 #include "lib_io/Stream.h"
