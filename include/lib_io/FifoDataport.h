@@ -63,6 +63,19 @@ FifoDataport_getCapacity(
 
 
 //------------------------------------------------------------------------------
+static inline size_t
+FifoDataport_getFree(
+    FifoDataport* self)
+{
+    size_t capacity = FifoDataport_getCapacity(self);
+    size_t used = FifoDataport_getSize(self);
+
+    assert(used <= capacity);
+    return capacity - used;
+}
+
+
+//------------------------------------------------------------------------------
 static inline bool
 FifoDataport_isEmpty(
     FifoDataport* self)
