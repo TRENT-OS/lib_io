@@ -24,6 +24,8 @@
 
 #include "lib_util/CharFifo.h"
 
+// #define FIFO_DATAPORT_PROFILING
+
 typedef struct
 {
     CharFifo dataStruct;
@@ -146,6 +148,18 @@ FifoDataport_getContiguous(
     size_t capacity = FifoDataport_getCapacity(self);
     size_t last = in % capacity;
 
+#ifdef FIFO_DATAPORT_PROFILING
+
+    size_t mem_last = self->dataStruct.last;
+    if (last != mem_last)
+    {
+        Debug_LOG_INFO(
+            "change due to concurrency: index 'last': %zu -> %zu, data 'in' %zu -> %zu",
+            last, mem_last, in, self->dataStruct.in);
+    }
+
+#endif
+
     return (first < last) ? last - first : capacity - first;
 }
 
@@ -226,6 +240,18 @@ FifoDataport_getContiguousFree(
 
     // self->dataStruct.first may have changed already, so we can't use it here
     size_t first = out % capacity;
+
+#ifdef FIFO_DATAPORT_PROFILING
+
+    size_t mem_first = self->dataStruct.first;
+    if (first != mem_first)
+    {
+        Debug_LOG_INFO(
+            "change due to concurrency: index 'first': %zu -> %zu, data 'out' %zu -> %zu",
+            first, mem_first, out, self->dataStruct.out);
+    }
+
+#endif
 
     return (first > last) ? first - last : capacity - last;
 }
