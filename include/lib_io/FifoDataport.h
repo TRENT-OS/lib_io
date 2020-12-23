@@ -113,10 +113,29 @@ FifoDataport_remove(
     FifoDataport* self,
     size_t amount)
 {
-    while (amount--)
+    size_t used = FifoDataport_getSize(self);
+    if (amount > used)
     {
-        CharFifo_pop(&self->dataStruct);
+        Debug_LOG_ERROR("FifoDataport_remove() amount %zu > used %zu", amount, used);
+        assert(0);
     }
+
+    // We don't loop over calling the FifoT's function CharFifo_pop(), because
+    // we know that char_dtor() does nothing for a char FIFO. So we can just
+    // modify the fields directly.
+    // The used bytes in the FIFO (aka "size") are calculated based on the
+    // fields "in" and "out". The fields "first" and "last" are used only for
+    // addressing data. Since we know they are always less than the FIFO
+    // capacity, we can avoid a potentially expensive modulo operation.
+    size_t capacity = FifoDataport_getCapacity(self);
+    size_t updated_first = self->dataStruct.first + amount;
+    if (updated_first >= capacity)
+    {
+        updated_first -= capacity;
+        assert(updated_first < capacity);
+    }
+    self->dataStruct.first = updated_first;
+    self->dataStruct.out += amount;
 }
 
 
