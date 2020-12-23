@@ -94,29 +94,83 @@ FifoDataport_isFull(
 
 
 //------------------------------------------------------------------------------
-static inline void const*
-FifoDataport_getFirst(
-    FifoDataport* self)
+static inline size_t
+FifoDataport_getContiguous(
+    FifoDataport* self,
+    void** buffer)
 {
-    if (FifoDataport_isEmpty(self))
+    // +-----------+----------+-----------+
+    // |<--free2-->|<--used-->|<--free1-->|
+    // +-----------+----------+-----------+
+    //           first       last
+    //
+    // +-----------+-----------+
+    // |<--used2-->|<--used1-->|  isFull
+    // |<--free2-->|<--free1-->|  isEmpty
+    // +-----------+-----------+
+    //        first/last
+    //
+    // +-----------+----------+-----------+
+    // |<--used2-->|<--free-->|<--used1-->|
+    // +-----------+----------+-----------+
+    // |          last      first         |
+    //
+    // The caller wants to get ("lock") a buffer with data in the FIFO, so it
+    // can access it without immediately removing it from the FIFO. This can be
+    // useful for zero-copy operations. In parallel another thread may add data
+    // to the FIFO. This is not a problem as long as we keep working on the
+    // snapshot taken from the FIFO.
+    size_t in = self->dataStruct.in;
+    size_t out = self->dataStruct.out;
+
+    // FIFO empty?
+    if (in == out)
     {
-        return NULL;
+        if (buffer)
+        {
+            *buffer = NULL;
+        }
+        return 0;
     }
-    return &self->data[self->dataStruct.first];
+
+    // Reading "first" is safe, because a thread putting data into the FIFO in
+    // parallel will not modify it.
+    size_t first = self->dataStruct.first;
+
+    if (buffer)
+    {
+        *buffer = &self->data[first];
+    }
+
+    // self->dataStruct.last may have changed already, so we can't use it here
+    size_t capacity = FifoDataport_getCapacity(self);
+    size_t last = in % capacity;
+
+    return (first < last) ? last - first : capacity - first;
 }
 
 
 //------------------------------------------------------------------------------
+// This is deprecated, use FifoDataport_getContiguous() directly to get the
+// buffer and the size atomically and avoid race conditions.
+static inline void const*
+FifoDataport_getFirst(
+    FifoDataport* self)
+{
+    void* buffer = NULL;
+    FifoDataport_getContiguous(self, &buffer);
+    return buffer; // NULL if FIFO is empty
+}
+
+
+//------------------------------------------------------------------------------
+// This is deprecated, use FifoDataport_getContiguous() directly to get the
+// buffer and the size atomically and avoid race conditions.
 static inline size_t
 FifoDataport_getAmountConsecutives(
     FifoDataport* self)
 {
-    size_t capacity = FifoDataport_getCapacity(self);
-    size_t size     = FifoDataport_getSize(self);
-    size_t first    = self->dataStruct.first;
-    size_t last     = self->dataStruct.last;
-
-    return (first > last) ? capacity - first : size;
+    return FifoDataport_getContiguous(self, NULL);
 }
 
 
