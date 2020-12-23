@@ -175,6 +175,63 @@ FifoDataport_getAmountConsecutives(
 
 
 //------------------------------------------------------------------------------
+static inline size_t
+FifoDataport_getContiguousFree(
+    FifoDataport* self,
+    void** buffer)
+{
+    // +-----------+----------+-----------+
+    // |<--free2-->|<--used-->|<--free1-->|
+    // +-----------+----------+-----------+
+    //           first       last
+    //
+    // +-----------+-----------+
+    // |<--used2-->|<--used1-->|  isFull
+    // |<--free2-->|<--free1-->|  isEmpty
+    // +-----------+-----------+
+    //        first/last
+    //
+    // +-----------+----------+-----------+
+    // |<--used2-->|<--free-->|<--used1-->|
+    // +-----------+----------+-----------+
+    // |          last      first         |
+    //
+    // The caller wants to get ("lock") an empty part of the FIFO, so it can
+    // put data there as a block, e.g. for DMA or avoiding intermediate buffers
+    // and memcpy(). In parallel another thread may remove data to the FIFO.
+    // This is not a problem as long as we keep working on the snapshot taken
+    // from the FIFO.
+    size_t capacity = FifoDataport_getCapacity(self);
+    size_t in = self->dataStruct.in;
+    size_t out = self->dataStruct.out;
+
+    // FIFO full ?
+    if ((out + capacity) == in)
+    {
+        if (buffer)
+        {
+            *buffer = NULL;
+        }
+        return 0;
+    }
+
+    // Reading "last" is safe, because a thread removing data from the FIFO in
+    // parallel will not modify it.
+    size_t last = self->dataStruct.last;
+
+    if (buffer)
+    {
+        *buffer = &self->data[last];
+    }
+
+    // self->dataStruct.first may have changed already, so we can't use it here
+    size_t first = out % capacity;
+
+    return (first > last) ? first - last : capacity - last;
+}
+
+
+//------------------------------------------------------------------------------
 static inline void
 FifoDataport_remove(
     FifoDataport* self,
