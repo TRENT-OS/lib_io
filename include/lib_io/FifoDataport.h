@@ -153,6 +153,38 @@ FifoDataport_remove(
 
 
 //------------------------------------------------------------------------------
+static inline void
+FifoDataport_add(
+    FifoDataport* self,
+    size_t amount)
+{
+    size_t free = FifoDataport_getFree(self);
+    if (amount > free)
+    {
+        Debug_LOG_ERROR("FifoDataport_add() amount %zu > free %zu", amount, free);
+        assert(0);
+    }
+
+    // The used bytes in the FIFO (aka "size") are calculated based on the
+    // fields "in" and "out". The fields "first" and "last" are used only for
+    // addressing data. Since we know they are always less than the FIFO
+    // capacity, we can avoid a potentially expensive modulo operation. There
+    // is no need to call CharFifo_push() here, because chars aren't objects
+    // that would require special handing.
+    size_t capacity = FifoDataport_getCapacity(self);
+    size_t updated_last = self->dataStruct.last + amount;
+    if (updated_last >= capacity)
+    {
+        updated_last -= capacity;
+        assert(updated_last < capacity);
+    }
+    self->dataStruct.last = updated_last;
+    self->dataStruct.in += amount;
+
+}
+
+
+//------------------------------------------------------------------------------
 static inline size_t
 FifoDataport_read(
     FifoDataport* self,
