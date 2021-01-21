@@ -35,6 +35,14 @@ FifoDataport;
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief FifoDataport constructor
+ *
+ * @param self (required) pointer to the FifoDataport context
+ * @param capacity (required) capacity in bytes of the FIFO in the dataport
+ *
+ * @retval true if succeeded
+ */
 static inline bool
 FifoDataport_ctor(
     FifoDataport* self,
@@ -47,6 +55,14 @@ FifoDataport_ctor(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief returns the amount of bytes that are currently in the FIFO in the
+ * dataport
+ *
+ * @param self (required) pointer to the FifoDataport context
+ *
+ * @return amount of bytes available in the FIFO in the dataport
+ */
 static inline size_t
 FifoDataport_getSize(
     FifoDataport* self)
@@ -56,6 +72,15 @@ FifoDataport_getSize(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief returns the maximum amount of bytes that could be pushed into the FIFO
+ * in the dataport
+ *
+ * @param self (required) pointer to the FifoDataport context
+ *
+ * @return maximum amount of bytes that could be put into the FIFO in the
+ * dataport
+ */
 static inline size_t
 FifoDataport_getCapacity(
     FifoDataport* self)
@@ -65,6 +90,15 @@ FifoDataport_getCapacity(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief returns the amount of bytes that could be still pushed into the FIFO
+ * in the dataport
+ *
+ * @param self (required) pointer to the FifoDataport context
+ *
+ * @return amount of bytes that could be still pushed into the FIFO in the
+ * dataport
+ */
 static inline size_t
 FifoDataport_getFree(
     FifoDataport* self)
@@ -78,6 +112,13 @@ FifoDataport_getFree(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief checks whether the FIFO in the dataport is empty
+ *
+ * @param self (required) pointer to the FifoDataport context
+ *
+ * @retval true if empty
+ */
 static inline bool
 FifoDataport_isEmpty(
     FifoDataport* self)
@@ -87,6 +128,13 @@ FifoDataport_isEmpty(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief checks whether the FIFO in the dataport is full
+ *
+ * @param self (required) pointer to the FifoDataport context
+ *
+ * @retval true if full
+ */
 static inline bool
 FifoDataport_isFull(
     FifoDataport* self)
@@ -96,6 +144,25 @@ FifoDataport_isFull(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief provides a pointer to the FIFO buffer in the dataport to the location
+ * of the first available byte according to the FIFO policy and returns the
+ * amount of available bytes from there until the buffer wrap around
+ *
+ * @note this is useful for 0-copy operations as data could be extracted using,
+ * for example, memcpy() or DMA
+ *
+ * @note the amount of contiguous bytes is not in necessarily the same as
+ * returned by FifoDataport_getSize(), it can be less
+ *
+ * @param self (required) pointer to the FifoDataport context
+ * @param buffer (optional) pointer to a pointer that will be set to the
+ * location of the first available byte according to the FIFO policy, it could
+ * be set to NULL by the caller if not interested in getting this information
+ *
+ * @return amount of available bytes from the location of the first available
+ * byte until the buffer wrap around
+ */
 static inline size_t
 FifoDataport_getContiguous(
     FifoDataport* self,
@@ -189,6 +256,25 @@ FifoDataport_getAmountConsecutives(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief provides a pointer to the FIFO buffer in the dataport to the first
+ * available location for new bytes according to the FIFO policy and returns the
+ * amount of available byte locations from there until the buffer wrap around
+ *
+ * @note this is useful for 0-copy operations as that memory space could be
+ * filled using, for example, memcpy() or DMA
+ *
+ * @note the amount of contiguous available locations is not necessarily the
+ * same as returned by FifoDataport_getCapacity(), it can be less
+ *
+ * @param self (required) pointer to the FifoDataport context
+ * @param buffer (optional) pointer to a pointer that will be set to the first
+ * available location for new bytes according to the FIFO policy, it could be
+ * set to NULL by the caller if not interested in getting this information
+ *
+ * @return amount of available byte locations from the first available location
+ * for new bytes until the buffer wrap around
+ */
 static inline size_t
 FifoDataport_getContiguousFree(
     FifoDataport* self,
@@ -258,6 +344,16 @@ FifoDataport_getContiguousFree(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief pops out a certain amount of bytes from the FIFO in the dataport
+ *
+ * This is to be called after some or all data from the buffer returned by
+ * FifoDataport_getContiguous() has been processed
+ *
+ * @param self (required) pointer to the FifoDataport context
+ * @param amount (required) amount to be removed
+ *
+ */
 static inline void
 FifoDataport_remove(
     FifoDataport* self,
@@ -290,6 +386,17 @@ FifoDataport_remove(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief counts as pushed a certain amount of bytes in the FIFO in the dataport
+ *
+ * This is to be called after some data is pushed into the buffer returned by
+ * FifoDataport_getContiguousFree()
+ *
+ *
+ * @param self (required) pointer to the FifoDataport context
+ * @param amount (required) amount pushed
+ *
+ */
 static inline void
 FifoDataport_add(
     FifoDataport* self,
@@ -322,6 +429,17 @@ FifoDataport_add(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief moves (copy and pop out) a certain amount of bytes from the FIFO in
+ * the dataport to a given buffer
+ *
+ * @param self (required) pointer to the FifoDataport context
+ * @param buf (required) pointer to the destination buffer
+ * @param len (required) maximum amount of bytes that buf could take
+ *
+ * @return the amount of bytes which have been actually moved (shall be always
+ * less or equal than len)
+ */
 static inline size_t
 FifoDataport_read(
     FifoDataport* self,
@@ -349,6 +467,17 @@ FifoDataport_read(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief copies a certain amount of bytes from a given buffer into the FIFO in
+ * the dataport
+ *
+ * @param self (required) pointer to the FifoDataport context
+ * @param buf (required) pointer to the source buffer
+ * @param len (required) maximum amount of bytes that could be taken from buf
+ *
+ * @return the amount of bytes which have been actually copied (shall be always
+ * less or equal than len)
+ */
 static inline size_t
 FifoDataport_write(
     FifoDataport* self,
@@ -371,6 +500,11 @@ FifoDataport_write(
 
 
 //------------------------------------------------------------------------------
+/**
+ * @brief FifoDataport destructor
+ *
+ * @param self (required) pointer to the FifoDataport context
+ */
 static inline void
 FifoDataport_dtor(
     FifoDataport* self)
