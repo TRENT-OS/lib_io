@@ -36,7 +36,7 @@ target_link_libraries(${PROJECT_NAME}
     INTERFACE
         os_core_api
         lib_debug
-        lib_util
+        lib_utils
         lib_mem
         lib_osal
 )

@@ -22,7 +22,7 @@
  */
 #pragma once
 
-#include "lib_util/CharFifo.h"
+#include "lib_utils/CharFifo.h"
 
 // #define FIFO_DATAPORT_PROFILING
 

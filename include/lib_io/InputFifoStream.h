@@ -19,7 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "lib_io/Stream.h"
-#include "lib_util/CharFifo.h"
+#include "lib_utils/CharFifo.h"
 
 #include <stddef.h>
 

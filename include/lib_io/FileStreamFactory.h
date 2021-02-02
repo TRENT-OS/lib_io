@@ -17,7 +17,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "lib_io/FileStream.h"
-#include "lib_util/Bitmap.h"
+#include "lib_utils/Bitmap.h"
 
 
 /* Exported macro ------------------------------------------------------------*/
