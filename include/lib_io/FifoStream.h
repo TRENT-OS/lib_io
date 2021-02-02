@@ -1,5 +1,5 @@
 /**
- * @addtogroup LibIO
+ * @addtogroup lib_io
  * @{
  *
  * @file FifoStream.h
