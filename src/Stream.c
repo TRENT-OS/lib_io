@@ -2,7 +2,6 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "lib_io/Stream.h"
-#include "lib_osal/System.h"
 
 #include "lib_debug/Debug.h"
 #include "lib_mem/Memory.h"
