@@ -19,7 +19,6 @@
 #include "lib_compiler/compiler.h"
 
 #include "lib_debug/Debug.h"
-#include "lib_osal/System.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -314,29 +313,6 @@ INLINE void
 Stream_putString(Stream* self, char const* string)
 {
     Stream_writeAllSync(self, string, strlen(string));
-}
-/**
- * @brief stays in a pseudo busy-loop trying to read all the 'len' bytes
- *  delaying 1 system tick
- *
- */
-INLINE void
-Stream_readAll(Stream* self, char* buff, size_t len)
-{
-    Debug_ASSERT_SELF(self);
-    Debug_ASSERT(buff != NULL);
-
-    size_t todo = len;
-
-    while (todo > 0)
-    {
-        todo -= Stream_read(self, &buff[len - todo], todo);
-
-        if (todo > 0)
-        {
-            System_delayTicks(1);
-        }
-    }
 }
 
 int

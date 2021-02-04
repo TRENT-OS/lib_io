@@ -2,7 +2,6 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "lib_io/FifoStream.h"
-#include "lib_osal/System.h"
 
 #include "lib_debug/Debug.h"
 #include <stdbool.h>
@@ -97,10 +96,23 @@ FifoStream_flush(Stream* stream)
     FifoStream* self = (FifoStream*) stream;
     Debug_ASSERT_SELF(self);
 
-    while (CharFifo_getSize(&self->writeFifo) > 0)
-    {
-        System_delayTicks(1);
-    }
+    /* There is no generic way to flush a FifoStream. What the caller could do
+     * is polling stream->available() until this is zero and use some form of
+     * sleeping between the calls to avoid burning CPU time. If the caller has
+     * more details about how the FIFO is used, it could also wait on some
+     * dedicated event that is triggered by the other entity using the FIFO
+     * once it has read all pending data.
+     *
+     * Unfortunately, we have to implement this function can can't just set
+     * FifoStream_vtable.flush to NULL. In Stream.c, there is Stream_flush()
+     * that will call our flush() without checking if a function is really set
+     * there. Unfortuantely, flush() does not have a return code either, that
+     * could be used to inform the caller that the flush failed.
+     * For debug builds we trigger an assert here. For release builds we can't
+     * do anything besides logging the message.
+     */
+    Debug_LOG_FATAL("flushing a FifoStream is not supported");
+    Debug_ASSERT(false);
 }
 
 void

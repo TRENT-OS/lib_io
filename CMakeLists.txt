@@ -38,5 +38,4 @@ target_link_libraries(${PROJECT_NAME}
         lib_debug
         lib_utils
         lib_mem
-        lib_osal
 )

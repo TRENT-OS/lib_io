@@ -2,7 +2,6 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "lib_io/InputFifoStream.h"
-#include "lib_osal/System.h"
 
 #include "lib_debug/Debug.h"
 #include <stdbool.h>
@@ -92,43 +91,37 @@ InputFifoStream_get(Stream* stream,
                     const char* delims,
                     unsigned timeoutTicks)
 {
-    DECL_UNUSED_VAR(InputFifoStream * self) = (InputFifoStream*) stream;
+    InputFifoStream* self = (InputFifoStream*) stream;
     Debug_ASSERT_SELF(self);
+    Debug_ASSERT(buff != NULL);
 
-    size_t i        = 0;
-    bool foundDelim = false;
-    unsigned long long timeBase = System_getTickCount();
+    CharFifo* readFifo = &self->readFifo;
+    Debug_ASSERT(readFifo != NULL);
 
-    while (i < len &&
-           !foundDelim &&
-           (timeoutTicks == 0 ||
-            System_getTickCount() - timeBase < timeoutTicks))
+    if (0 != timeoutTicks)
     {
-        if (InputFifoStream_read(stream, &buff[i], sizeof(char)) > 0)
-        {
-            if (delims != NULL)
-            {
-                if (strchr(delims, buff[i]) != NULL)
-                {
-                    foundDelim = true;
-                    buff[i] = 0;
-                }
-                else
-                {
-                    i++;
-                }
-            }
-            else
-            {
-                i++;
-            }
-        }
-        else
-        {
-            System_delayTicks(1);
-        }
+        Debug_LOG_ERROR("timeouts are not supported");
+        return 0;
     }
-    return (foundDelim || i == len) ? i : EOF;
+
+    size_t i = 0;
+    while (i < len)
+    {
+        if (CharFifo_isEmpty(readFifo))
+        {
+            break;
+        }
+
+        char c = CharFifo_getAndPop(readFifo);
+        if ((delims != NULL) && (strchr(delims, c) != NULL))
+        {
+            break;
+        }
+
+        buff[i++] = c;
+    }
+
+    return i;
 }
 
 size_t
