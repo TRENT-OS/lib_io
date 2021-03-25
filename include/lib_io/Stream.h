@@ -242,7 +242,7 @@ INLINE void
 Stream_writeNassert(Stream* self, const char* buff, size_t len)
 {
     Debug_ASSERT_SELF(self);
-    size_t written = Stream_write(self, buff, len);
+    DECL_UNUSED_VAR(size_t written) = Stream_write(self, buff, len);
     Debug_ASSERT(written == len);
 }
 
@@ -250,7 +250,7 @@ INLINE void
 Stream_readNassert(Stream* self, char* buff, size_t len)
 {
     Debug_ASSERT_SELF(self);
-    size_t read = Stream_read(self, buff, len);
+    DECL_UNUSED_VAR(size_t read) = Stream_read(self, buff, len);
     Debug_ASSERT(read == len);
 }
 /**

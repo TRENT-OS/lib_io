@@ -66,9 +66,7 @@ FifoStream_write(Stream* stream, char const* buffer, size_t length)
     Debug_ASSERT_SELF(self);
     Debug_ASSERT(buffer != NULL);
 
-    bool ok = false;
     size_t capacity = 0, size = 0, free = 0, written = 0;
-    char const* pC = NULL;
 
     if (length > 0)
     {
@@ -80,9 +78,10 @@ FifoStream_write(Stream* stream, char const* buffer, size_t length)
 
         for (size_t i = 0; i < written; i++)
         {
-            pC = &((char const*) buffer)[i];
-            ok = CharFifo_push(&self->writeFifo, pC);
-            Debug_ASSERT(ok);
+            char const* pC = &((char const*) buffer)[i];
+            DECL_UNUSED_VAR(const bool isPushed)
+                = CharFifo_push(&self->writeFifo, pC);
+            Debug_ASSERT(isPushed);
         }
     }
     else { /* do nothing */ }
@@ -93,8 +92,7 @@ FifoStream_write(Stream* stream, char const* buffer, size_t length)
 void
 FifoStream_flush(Stream* stream)
 {
-    FifoStream* self = (FifoStream*) stream;
-    Debug_ASSERT_SELF(self);
+    Debug_ASSERT_SELF((FifoStream*) stream);
 
     /* There is no generic way to flush a FifoStream. What the caller could do
      * is polling stream->available() until this is zero and use some form of
