@@ -1,3 +1,3 @@
 # IO Library
 
-Modules related to the I/O operation are placed in this library.
+The library provides modules related to I/O operations.

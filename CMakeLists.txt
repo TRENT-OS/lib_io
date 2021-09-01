@@ -1,5 +1,5 @@
 #
-# The IO Library
+# IO Library
 #
 # Copyright (C) 2020, Hensoldt Cyber GmbH
 #
