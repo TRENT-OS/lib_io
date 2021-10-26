@@ -10,7 +10,7 @@
  *
  * @author Carmelo Pintaudi
  *
- * Copyright (C) 2019, Hensoldt Cyber GmbH
+ * Copyright (C) 2019, HENSOLDT Cyber GmbH
  */
 #if !defined(FIFO_STREAM_H)
 #define FIFO_STREAM_H

@@ -1,4 +1,4 @@
-/*  Copyright (C) 2020, Hensoldt Cyber GmbH */
+/*  Copyright (C) 2020, HENSOLDT Cyber GmbH */
 /* Includes ------------------------------------------------------------------*/
 
 #include "lib_io/InputFifoStream.h"

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2020, Hensoldt Cyber GmbH
+ * Copyright (C) 2020, HENSOLDT Cyber GmbH
  *
  * @brief Fifo policy class for bytes in a dataport.
  * The implementation behind this support class does implement Single Producer

@@ -8,7 +8,7 @@
  *
  * @author Carmelo Pintaudi
  *
- * Copyright (C) 2019, Hensoldt Cyber GmbH
+ * Copyright (C) 2019, HENSOLDT Cyber GmbH
  */
 
 #if !defined(FILE_STREAM_FACTORY_H)
