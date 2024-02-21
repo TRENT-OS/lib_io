@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2019-2024, HENSOLDT Cyber GmbH
+ * 
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * For commercial licensing, contact: info.cyber@hensoldt.net
+ */
+
 /**
  * @addtogroup lib_io
  * @{
@@ -7,8 +15,6 @@
  * @brief a file stream abstract factory interface
  *
  * @author Carmelo Pintaudi
- *
- * Copyright (C) 2019, HENSOLDT Cyber GmbH
  */
 
 #if !defined(FILE_STREAM_FACTORY_H)
